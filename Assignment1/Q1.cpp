@@ -1,53 +1,49 @@
 // Consider an array arr[] = {2, 5, 8, 12, 16, 23, 38, 56, 72, 91} and use Binary Search to find
 // the target 23.
 
-#include<iostream>
+#include <iostream>
+#include <vector>
 using namespace std;
 
-int BinarySearch(const vector<int>& array, int key)
+int BinarySearch(const vector<int>& array, int low, int high, int key)
 {
-    int mid , low, high;
+    // element not found
+    if (low > high)
+        return -1;
 
-    low = 0;
-    high = array.size() - 1;
+    int mid = low + (high - low) / 2;
 
-    while(low <= high)
-    {
-        mid = low + (high-low)/2;
-
-        if (array[mid] == key)
+    // If key found
+    if (array[mid] == key)
         return mid;
 
-        else if (key > array[mid])
-        low = mid + 1;
+    // If key is smaller, left half
+    if (key < array[mid])
+        return BinarySearch(array, low, mid - 1, key);
 
-        else 
-        high = mid - 1;
-    }
-    return -1;
+    // Else right half
+    return BinarySearch(array, mid + 1, high, key);
 }
 
 int main()
 {
-    int size ;
-    cout<<"Enter size: ";
-    cin>>size;
+    int size;
+    cout << "Enter size: ";
+    cin >> size;
 
     vector<int> array(size);
-    cout<<"Enter the elements of the array: ";
-    for(int i=0; i<size; i++)
-    {
-        cin>>array[i];
-    }
+    cout << "Enter the elements of the array (sorted): ";
+    for (int i = 0; i < size; i++)
+        cin >> array[i];
 
     int key;
-    cout<<"Enter Key: ";
-    cin>>key;
+    cout << "Enter Key: ";
+    cin >> key;
 
-    int result = BinarySearch(array, key);
+    int result = BinarySearch(array, 0, size - 1, key);
 
-    if(array[result] == key)
-    cout<<"the index at which the key is present is: "<<result<<endl;
+    if (result != -1)
+        cout << "The key is present at index: " << result << endl;
     else
-    cout<<"key is not present in the array";
+        cout << "Key is not present in the array";
 }
